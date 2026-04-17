@@ -28,9 +28,30 @@
     font-family: 'Space Grotesk', sans-serif;
     font-size: 15px;
     line-height: 1.6;
+    cursor: none;
   }
 
-  /* NAV */
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--green);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease, width 0.2s, height 0.2s, opacity 0.2s;
+    box-shadow: 0 0 0 3px rgba(74,222,128,0.15);
+  }
+  #cursor.hovered {
+    width: 22px; height: 22px;
+    background: transparent;
+    border: 1.5px solid var(--green);
+    box-shadow: none;
+  }
+  a, button, .card, .stack-pill, .nav-links a { cursor: none; }
+
+  /* ─── NAV ─── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -52,11 +73,9 @@
     text-decoration: none;
     letter-spacing: -0.3px;
   }
-
   .nav-logo span { color: var(--green); }
 
   .nav-links { display: flex; gap: 8px; list-style: none; }
-
   .nav-links a {
     color: var(--text-sub);
     text-decoration: none;
@@ -66,9 +85,7 @@
     border-radius: 6px;
     transition: all 0.15s;
   }
-
   .nav-links a:hover { color: var(--text); background: var(--card); }
-
   .nav-cta {
     background: var(--text) !important;
     color: var(--bg) !important;
@@ -76,14 +93,60 @@
   }
   .nav-cta:hover { background: #ccc !important; }
 
-  /* HERO */
+  /* ─── GLITCH ─── */
+  .glitch {
+    position: relative;
+    display: inline-block;
+  }
+  .glitch:hover {
+    animation: glitch-main 0.4s steps(2) forwards;
+  }
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .glitch:hover::before {
+    animation: glitch-top 0.4s steps(2) forwards;
+    color: #4ade80;
+    clip-path: inset(0 0 60% 0);
+  }
+  .glitch:hover::after {
+    animation: glitch-bot 0.4s steps(2) forwards;
+    color: #ff0055;
+    clip-path: inset(60% 0 0 0);
+  }
+  @keyframes glitch-main {
+    0%  { transform: none; }
+    25% { transform: translateX(3px); }
+    50% { transform: translateX(-3px); }
+    75% { transform: translateX(2px); }
+    100%{ transform: none; }
+  }
+  @keyframes glitch-top {
+    0%  { opacity: 0; transform: none; }
+    20% { opacity: 1; transform: translateX(-4px); }
+    60% { opacity: 1; transform: translateX(4px); }
+    100%{ opacity: 0; transform: none; }
+  }
+  @keyframes glitch-bot {
+    0%  { opacity: 0; transform: none; }
+    20% { opacity: 1; transform: translateX(4px); }
+    60% { opacity: 1; transform: translateX(-4px); }
+    100%{ opacity: 0; transform: none; }
+  }
+
+  /* ─── HERO ─── */
   .hero {
     min-height: 100vh;
     display: flex;
     align-items: center;
     padding: 100px 48px 60px;
   }
-
   .hero-inner { max-width: 760px; }
 
   .hero-badge {
@@ -99,7 +162,6 @@
     margin-bottom: 32px;
     animation: fadeUp 0.5s 0.1s both;
   }
-
   .hero-badge-dot {
     width: 7px; height: 7px;
     border-radius: 50%;
@@ -116,8 +178,20 @@
     margin-bottom: 24px;
     animation: fadeUp 0.5s 0.2s both;
   }
-
   .hero-title .dim { color: var(--text-dim); }
+
+  /* blinking cursor */
+  .hero-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 0.85em;
+    background: var(--green);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+    border-radius: 1px;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
   .hero-desc {
     font-size: 17px;
@@ -126,13 +200,27 @@
     line-height: 1.75;
     margin-bottom: 40px;
     animation: fadeUp 0.5s 0.3s both;
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 2em;
   }
+  /* typewriter */
+  .typewriter {
+    overflow: hidden;
+    border-right: 2px solid var(--green);
+    white-space: nowrap;
+    width: 0;
+    animation:
+      typing 1.8s steps(60) 0.8s forwards,
+      cursor-fade 0.4s 2.8s forwards;
+  }
+  @keyframes typing { from{width:0} to{width:100%} }
+  @keyframes cursor-fade { to{border-color:transparent} }
 
   .hero-btns {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-    animation: fadeUp 0.5s 0.4s both;
+    animation: fadeUp 0.5s 0.5s both;
   }
 
   .btn {
@@ -145,14 +233,11 @@
     font-weight: 600;
     border-radius: 8px;
     text-decoration: none;
-    cursor: pointer;
     transition: all 0.15s;
     border: none;
   }
-
   .btn-primary { background: var(--text); color: var(--bg); }
   .btn-primary:hover { background: #d0d0d0; }
-
   .btn-outline {
     background: transparent;
     color: var(--text-sub);
@@ -164,7 +249,7 @@
     background: var(--card);
   }
 
-  /* STATS BAR */
+  /* ─── STATS BAR ─── */
   .stats-bar {
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
@@ -173,9 +258,7 @@
     gap: 48px;
     flex-wrap: wrap;
   }
-
   .stat { display: flex; flex-direction: column; gap: 4px; }
-
   .stat-num {
     font-size: 28px;
     font-weight: 700;
@@ -183,7 +266,6 @@
     letter-spacing: -1px;
     line-height: 1;
   }
-
   .stat-label {
     font-size: 12px;
     color: var(--text-dim);
@@ -192,13 +274,60 @@
     letter-spacing: 0.08em;
   }
 
-  /* SECTIONS */
+  /* ─── MARQUEE TICKER ─── */
+  .ticker {
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .ticker::before,
+  .ticker::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .ticker::before { left: 0;  background: linear-gradient(to right,  var(--bg), transparent); }
+  .ticker::after  { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 22s linear infinite;
+    gap: 0;
+  }
+  .ticker-track:hover { animation-play-state: paused; }
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .ticker-item:hover { color: var(--green); }
+  .ticker-sep {
+    color: var(--border);
+    font-size: 16px;
+    user-select: none;
+    padding: 0 4px;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ─── SECTIONS ─── */
   .section {
     padding: 80px 48px;
     max-width: 1160px;
     margin: 0 auto;
   }
-
   .section-header {
     display: flex;
     align-items: baseline;
@@ -207,27 +336,24 @@
     flex-wrap: wrap;
     gap: 12px;
   }
-
   .section-title {
     font-size: 22px;
     font-weight: 700;
     color: var(--text);
     letter-spacing: -0.5px;
   }
-
   .section-sub {
     font-size: 13px;
     color: var(--text-dim);
     font-family: 'JetBrains Mono', monospace;
   }
 
-  /* PROJECTS GRID */
+  /* ─── PROJECTS GRID ─── */
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 16px;
   }
-
   .card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -236,9 +362,54 @@
     transition: border-color 0.2s, transform 0.2s;
     display: flex;
     flex-direction: column;
+    position: relative;
   }
-
   .card:hover { border-color: var(--border-hi); transform: translateY(-2px); }
+
+  /* card hover reveal overlay */
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(13,13,13,0.82);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    z-index: 10;
+    border-radius: 12px;
+  }
+  .card:hover .card-overlay { opacity: 1; }
+  .card-overlay-inner {
+    display: flex;
+    gap: 10px;
+  }
+  .card-overlay-btn {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 7px;
+    text-decoration: none;
+    transition: all 0.15s;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .cob-primary {
+    background: var(--text);
+    color: var(--bg);
+  }
+  .cob-primary:hover { background: #ccc; }
+  .cob-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-hi);
+  }
+  .cob-outline:hover { background: var(--card-hover); }
+  .cob-disabled {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    pointer-events: none;
+  }
 
   .card-media {
     width: 100%;
@@ -251,10 +422,8 @@
     justify-content: center;
     flex-shrink: 0;
   }
-
   .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .card-media iframe { width: 100%; height: 100%; border: none; display: block; }
-
   .card-media-placeholder {
     display: flex;
     flex-direction: column;
@@ -269,7 +438,6 @@
       #141414 20px, #141414 40px
     );
   }
-
   .placeholder-label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
@@ -281,7 +449,6 @@
     border-radius: 4px;
     border: 1px solid var(--border);
   }
-
   .placeholder-num {
     font-size: 52px;
     font-weight: 700;
@@ -289,7 +456,6 @@
     letter-spacing: -2px;
     line-height: 1;
   }
-
   .card-status {
     position: absolute;
     top: 12px; right: 12px;
@@ -300,19 +466,16 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
-
   .status-live {
     background: rgba(74,222,128,0.15);
     color: var(--green);
     border: 1px solid rgba(74,222,128,0.3);
   }
-
   .status-wip {
     background: rgba(255,200,50,0.1);
     color: #f0b429;
     border: 1px solid rgba(255,200,50,0.2);
   }
-
   .card-body {
     padding: 24px;
     display: flex;
@@ -320,23 +483,19 @@
     gap: 12px;
     flex: 1;
   }
-
   .card-title {
     font-size: 17px;
     font-weight: 700;
     color: var(--text);
     letter-spacing: -0.3px;
   }
-
   .card-desc {
     font-size: 14px;
     color: var(--text-sub);
     line-height: 1.65;
     flex: 1;
   }
-
   .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-
   .tag {
     font-size: 12px;
     font-weight: 500;
@@ -346,14 +505,12 @@
     border: 1px solid var(--border);
     color: var(--text-sub);
   }
-
   .card-footer {
     padding: 16px 24px;
     border-top: 1px solid var(--border);
     display: flex;
     gap: 8px;
   }
-
   .card-link {
     display: inline-flex;
     align-items: center;
@@ -368,9 +525,7 @@
     background: var(--bg);
     transition: all 0.15s;
   }
-
   .card-link:hover { color: var(--text); border-color: var(--border-hi); }
-
   .card-link-primary {
     background: var(--text);
     color: var(--bg);
@@ -378,13 +533,12 @@
   }
   .card-link-primary:hover { background: #d0d0d0; border-color: #d0d0d0; color: var(--bg); }
 
-  /* STACK */
+  /* ─── STACK ─── */
   .stack-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 8px;
   }
-
   .stack-pill {
     background: var(--card);
     border: 1px solid var(--border);
@@ -399,9 +553,7 @@
     transition: all 0.15s;
     cursor: default;
   }
-
   .stack-pill:hover { border-color: var(--border-hi); color: var(--text); background: var(--card-hover); }
-
   .stack-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
@@ -409,10 +561,9 @@
     flex-shrink: 0;
     transition: background 0.15s;
   }
-
   .stack-pill:hover .stack-dot { background: var(--green); }
 
-  /* CONTACT */
+  /* ─── CONTACT ─── */
   .contact-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -423,7 +574,6 @@
     gap: 48px;
     align-items: center;
   }
-
   .contact-left h2 {
     font-size: clamp(28px, 4vw, 44px);
     font-weight: 700;
@@ -431,11 +581,8 @@
     line-height: 1.1;
     margin-bottom: 16px;
   }
-
   .contact-left p { color: var(--text-sub); font-size: 15px; line-height: 1.7; }
-
   .contact-right { display: flex; flex-direction: column; gap: 12px; }
-
   .contact-item {
     display: flex;
     align-items: center;
@@ -448,9 +595,7 @@
     transition: all 0.15s;
     gap: 12px;
   }
-
   .contact-item:hover { border-color: var(--border-hi); background: #111; }
-
   .contact-item-label {
     font-size: 11px;
     text-transform: uppercase;
@@ -459,11 +604,10 @@
     font-weight: 500;
     margin-bottom: 3px;
   }
-
   .contact-item-value { font-size: 14px; font-weight: 600; color: var(--text); }
   .contact-arrow { color: var(--text-dim); font-size: 16px; flex-shrink: 0; }
 
-  /* FOOTER */
+  /* ─── FOOTER ─── */
   footer {
     border-top: 1px solid var(--border);
     padding: 24px 48px;
@@ -476,12 +620,11 @@
     color: var(--text-dim);
   }
 
-  /* ANIMATIONS */
+  /* ─── ANIMATIONS ─── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-
   .reveal {
     opacity: 0;
     transform: translateY(16px);
@@ -489,7 +632,7 @@
   }
   .reveal.visible { opacity: 1; transform: none; }
 
-  /* RESPONSIVE */
+  /* ─── RESPONSIVE ─── */
   @media (max-width: 768px) {
     nav { padding: 0 20px; }
     .hero { padding: 90px 20px 48px; }
@@ -499,7 +642,6 @@
     footer { padding: 20px; }
     .nav-links { display: none; }
   }
-
   @media (max-width: 480px) {
     .projects-grid { grid-template-columns: 1fr; }
   }
@@ -512,12 +654,12 @@
      ============================================= -->
 <script>
 const CONFIG = {
-  handle:  "@yourhandle",
+  handle:  "@nyrosk",
   role:    "Full Stack Dev",
-  bio:     "I build web3 products and games — from minting bots to game sites. Full stack, front to back.",
-  email:   "you@email.com",
-  github:  "https://github.com/yourhandle",
-  twitter: "https://twitter.com/yourhandle",
+  bio:     "I build web3 products, from bots to game sites",
+  email:   "me@email.com",
+  github:  "https://github.com/0xeth22-star",
+  twitter: "https://twitter.com/nyrosk",
 
   stats: [
     { num: "3+",   label: "Projects Shipped" },
@@ -532,11 +674,11 @@ const CONFIG = {
       title:  "Minting Bot Website",
       desc:   "Frontend interface for an automated NFT minting bot. Wallet integration, real-time status, transaction feedback.",
       tags:   ["Web3", "NFT", "Wallet Connect", "React"],
-      status: "wip",   // "live" | "wip" | null
-      live:   null,    // add URL when live: "https://..."
-      repo:   null,    // add repo URL: "https://github.com/..."
-      video:  null,    // YouTube embed: "https://www.youtube.com/embed/VIDEO_ID"
-      image:  null,    // screenshot: "images/project1.png"
+      status: "wip",
+      live:   null,
+      repo:   null,
+      video:  null,
+      image:  null,
     },
     {
       number: "02",
@@ -572,6 +714,9 @@ const CONFIG = {
 </script>
 <!-- ============================================= -->
 
+<!-- Custom cursor -->
+<div id="cursor"></div>
+
 <nav>
   <a class="nav-logo" href="#" id="nav-handle"></a>
   <ul class="nav-links">
@@ -585,7 +730,7 @@ const CONFIG = {
   <div class="hero-inner">
     <div class="hero-badge"><div class="hero-badge-dot"></div><span id="hero-role"></span></div>
     <h1 class="hero-title" id="hero-title"></h1>
-    <p class="hero-desc" id="hero-desc"></p>
+    <p class="hero-desc"><span class="typewriter" id="hero-desc"></span></p>
     <div class="hero-btns">
       <a href="#work" class="btn btn-primary">View Projects</a>
       <a href="#contact" class="btn btn-outline">Get in Touch</a>
@@ -594,6 +739,9 @@ const CONFIG = {
 </div>
 
 <div class="stats-bar" id="stats-bar"></div>
+
+<!-- Marquee ticker -->
+<div class="ticker" id="ticker-wrap"></div>
 
 <div class="section reveal" id="work">
   <div class="section-header">
@@ -628,23 +776,65 @@ const CONFIG = {
 </footer>
 
 <script>
-// Nav
+/* ── CUSTOM CURSOR ── */
+const cur = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .card, .stack-pill').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('hovered'));
+});
+
+/* ── NAV ── */
+const handle = CONFIG.handle.replace('@','');
 const h = document.getElementById('nav-handle');
-h.innerHTML = '<span>@</span>' + CONFIG.handle.replace('@','');
+h.innerHTML = '<span>@</span>' + handle;
+h.setAttribute('data-text', '@' + handle);
+h.classList.add('glitch');
 
-// Hero
+/* ── HERO ── */
 document.getElementById('hero-role').textContent = CONFIG.role;
-document.getElementById('hero-title').innerHTML =
-  CONFIG.handle.replace('@','') + '<br/><span class="dim">' + CONFIG.role + '</span>';
-document.getElementById('hero-desc').textContent = CONFIG.bio;
 
-// Stats
+// title with glitch + blinking cursor
+const titleEl = document.getElementById('hero-title');
+const nameSpan = document.createElement('span');
+nameSpan.className = 'glitch';
+nameSpan.setAttribute('data-text', handle);
+nameSpan.textContent = handle;
+const cursorSpan = document.createElement('span');
+cursorSpan.className = 'hero-cursor';
+const roleSpan = document.createElement('span');
+roleSpan.className = 'dim';
+roleSpan.textContent = CONFIG.role;
+titleEl.appendChild(nameSpan);
+titleEl.appendChild(cursorSpan);
+titleEl.appendChild(document.createElement('br'));
+titleEl.appendChild(roleSpan);
+
+// typewriter bio
+const descEl = document.getElementById('hero-desc');
+descEl.textContent = CONFIG.bio;
+
+/* ── STATS ── */
 const sb = document.getElementById('stats-bar');
 CONFIG.stats.forEach(s => {
   sb.innerHTML += `<div class="stat"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div>`;
 });
 
-// Projects
+/* ── TICKER ── */
+const tickerWrap = document.getElementById('ticker-wrap');
+const items = CONFIG.stack.concat(CONFIG.stack); // double for seamless loop
+const trackHTML = '<div class="ticker-track">' +
+  items.map((s, i) =>
+    `<span class="ticker-item">${s}</span>` +
+    (i < items.length - 1 ? '<span class="ticker-sep">·</span>' : '')
+  ).join('') +
+'</div>';
+tickerWrap.innerHTML = trackHTML;
+
+/* ── PROJECTS ── */
 document.getElementById('project-count').textContent = CONFIG.projects.length + ' projects';
 const pg = document.getElementById('projects-grid');
 
@@ -667,13 +857,28 @@ CONFIG.projects.forEach(p => {
     ? `<div class="card-status status-wip">● In Progress</div>`
     : '';
 
+  // footer links (below card)
   let links = '';
   if (p.live) links += `<a class="card-link card-link-primary" href="${p.live}" target="_blank">↗ View Live</a>`;
   if (p.repo) links += `<a class="card-link" href="${p.repo}" target="_blank">⌥ Source</a>`;
   if (!p.live && !p.repo) links = `<span class="card-link" style="opacity:0.35;pointer-events:none;cursor:default">Links coming soon</span>`;
 
+  // overlay buttons
+  let overlayBtns = '';
+  if (p.live && p.repo) {
+    overlayBtns = `<a class="card-overlay-btn cob-primary" href="${p.live}" target="_blank">↗ View Live</a>
+                   <a class="card-overlay-btn cob-outline" href="${p.repo}" target="_blank">⌥ Source</a>`;
+  } else if (p.live) {
+    overlayBtns = `<a class="card-overlay-btn cob-primary" href="${p.live}" target="_blank">↗ View Live</a>`;
+  } else if (p.repo) {
+    overlayBtns = `<a class="card-overlay-btn cob-outline" href="${p.repo}" target="_blank">⌥ Source</a>`;
+  } else {
+    overlayBtns = `<span class="card-overlay-btn cob-disabled">Coming Soon</span>`;
+  }
+
   pg.innerHTML += `
     <div class="card">
+      <div class="card-overlay"><div class="card-overlay-inner">${overlayBtns}</div></div>
       <div class="card-media">${media}${badge}</div>
       <div class="card-body">
         <div class="card-title">${p.title}</div>
@@ -684,13 +889,13 @@ CONFIG.projects.forEach(p => {
     </div>`;
 });
 
-// Stack
+/* ── STACK ── */
 const sg = document.getElementById('stack-grid');
 CONFIG.stack.forEach(s => {
   sg.innerHTML += `<div class="stack-pill"><div class="stack-dot"></div>${s}</div>`;
 });
 
-// Contact
+/* ── CONTACT ── */
 const cl = document.getElementById('contact-links');
 cl.innerHTML += `
   <a class="contact-item" href="mailto:${CONFIG.email}">
@@ -710,7 +915,7 @@ if (CONFIG.twitter) cl.innerHTML += `
 
 document.getElementById('footer-left').textContent = `${CONFIG.handle} © ${new Date().getFullYear()}`;
 
-// Scroll reveal
+/* ── SCROLL REVEAL ── */
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.08 });
