@@ -150,8 +150,7 @@
   .ep-toast{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);color:var(--green);border-radius:8px;padding:10px 16px;font-size:13px;text-align:center;margin-bottom:14px;display:none;font-family:'JetBrains Mono',monospace}
   .ep-toast.show{display:block}
 
-  #edit-hint{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;z-index:200;pointer-events:none;transition:opacity .6s}
-  #edit-hint span{color:var(--green)}
+
   #pin-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:600;display:none;align-items:center;justify-content:center}
   #pin-modal.show{display:flex}
   .pin-box{background:#111;border:1px solid var(--border);border-radius:16px;padding:32px 28px;width:300px;text-align:center}
@@ -180,7 +179,7 @@ const CONFIG = {
   email:   "me@email.com",
   github:  "https://github.com/0xeth22-star",
   twitter: "https://twitter.com/nyrosk",
-  editorPin: "1234",  /* ← change this to your PIN */
+
   stats: [
     { num: "3+",   label: "Projects Shipped" },
     { num: "Web3", label: "Niche" },
@@ -201,7 +200,7 @@ let PROJECTS = loadP();
 </script>
 
 <div id="cursor"></div>
-<div id="edit-hint">press <span>E</span> to edit projects</div>
+
 
 <nav>
   <a class="nav-logo" href="#" id="nav-handle"></a>
@@ -376,20 +375,37 @@ const pinModal=document.getElementById('pin-modal');
 let pinBuffer='';
 let unlocked=false;
 
-/* ── PIN MODAL ── */
-function showPinModal(){ pinBuffer=''; updatePinDots(); document.getElementById('pin-error').textContent=''; pinModal.classList.add('show'); hookCursor(pinModal); }
-function closePinModal(){ pinModal.classList.remove('show'); pinBuffer=''; updatePinDots(); }
-function updatePinDots(){ for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('filled',i<pinBuffer.length); }
-function pinPress(k){
+/*
+  TO SET YOUR PIN — run this once in your browser console, copy the output, paste below:
+  crypto.subtle.digest('SHA-256',new TextEncoder().encode('1234')).then(b=>console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
+  (replace '1234' with your actual PIN)
+*/
+const PIN_HASH='f8638b979b2f4f793ddb6dbd197e0ee25a7a6ea32b0ae22f5e3c5d119d839e75'; /* hash of 1234 — change this */
+
+async function hashPin(pin){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pin));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function pinPress(k){
   if(k==='del'){ pinBuffer=pinBuffer.slice(0,-1); updatePinDots(); return; }
   if(pinBuffer.length>=4) return;
   pinBuffer+=k; updatePinDots();
   if(pinBuffer.length===4){
-    if(pinBuffer===CONFIG.editorPin){ closePinModal(); unlocked=true; openEditor(); }
+    const entered=await hashPin(pinBuffer);
+    if(entered===PIN_HASH){ closePinModal(); unlocked=true; openEditor(); }
     else{ document.getElementById('pin-error').textContent='wrong PIN'; pinBuffer=''; setTimeout(()=>{ updatePinDots(); document.getElementById('pin-error').textContent=''; },800); }
   }
 }
-/* physical keyboard PIN entry */
+
+function showPinModal(){
+  pinBuffer=''; updatePinDots(); document.getElementById('pin-error').textContent='';
+  document.querySelector('.pin-label').textContent='enter PIN';
+  pinModal.classList.add('show'); hookCursor(pinModal);
+}
+function closePinModal(){ pinModal.classList.remove('show'); pinBuffer=''; updatePinDots(); }
+function updatePinDots(){ for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('filled',i<pinBuffer.length); }
+
 document.addEventListener('keydown',e=>{
   if(pinModal.classList.contains('show')){
     if(e.key>='0'&&e.key<='9') pinPress(e.key);
@@ -398,26 +414,22 @@ document.addEventListener('keydown',e=>{
     return;
   }
   if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
-  if(e.key==='e'||e.key==='E'){ panel.classList.contains('open') ? closeEditor() : tryOpen(); }
+  if(e.key==='e'||e.key==='E'){ panel.classList.contains('open')?closeEditor():tryOpen(); }
   if(e.key==='Escape') closeEditor();
 });
 
-/* ── MOBILE: tap nav logo 5x fast ── */
-let tapCount=0, tapTimer=null;
-document.getElementById('nav-handle').addEventListener('click', e=>{
-  e.preventDefault();
-  tapCount++;
+/* mobile: tap logo 5x fast */
+let tapCount=0,tapTimer=null;
+document.getElementById('nav-handle').addEventListener('click',e=>{
+  e.preventDefault(); tapCount++;
   clearTimeout(tapTimer);
   tapTimer=setTimeout(()=>{ tapCount=0; },1000);
   if(tapCount>=5){ tapCount=0; tryOpen(); }
 });
 
-function tryOpen(){ if(unlocked||panel.classList.contains('open')){ panel.classList.contains('open')?closeEditor():openEditor(); } else { showPinModal(); } }
+function tryOpen(){ panel.classList.contains('open')?closeEditor():(unlocked?openEditor():showPinModal()); }
 function openEditor(){ panel.classList.add('open'); renderEditor(); }
 function closeEditor(){ panel.classList.remove('open'); editingId=null; }
-
-// fade hint
-setTimeout(()=>{ const h=document.getElementById('edit-hint'); if(h) h.style.opacity='0'; },4500);
 
 function esc(s){ return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
