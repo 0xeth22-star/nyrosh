@@ -6,652 +6,160 @@
 <title>Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --bg:        #0d0d0d;
-    --card:      #161616;
-    --card-hover:#1e1e1e;
-    --border:    #2a2a2a;
-    --border-hi: #444;
-    --text:      #f0f0f0;
-    --text-sub:  #999;
-    --text-dim:  #555;
-    --tag-bg:    #1e1e1e;
-    --green:     #4ade80;
-  }
+  :root{--bg:#0d0d0d;--card:#161616;--card-hover:#1e1e1e;--border:#2a2a2a;--border-hi:#444;--text:#f0f0f0;--text-sub:#999;--text-dim:#555;--tag-bg:#1e1e1e;--green:#4ade80}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:15px;line-height:1.6;cursor:none}
+  #cursor{position:fixed;width:10px;height:10px;background:var(--green);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;box-shadow:0 0 0 3px rgba(74,222,128,.15)}
+  #cursor.hovered{width:22px;height:22px;background:transparent;border:1.5px solid var(--green);box-shadow:none}
+  a,button,.card,.stack-pill{cursor:none}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+  .nav-logo{font-weight:700;font-size:17px;color:var(--text);text-decoration:none;letter-spacing:-.3px}
+  .nav-logo span{color:var(--green)}
+  .nav-links{display:flex;gap:8px;list-style:none}
+  .nav-links a{color:var(--text-sub);text-decoration:none;font-size:14px;font-weight:500;padding:6px 14px;border-radius:6px;transition:all .15s;cursor:none}
+  .nav-links a:hover{color:var(--text);background:var(--card)}
+  .nav-cta{background:var(--text)!important;color:var(--bg)!important;font-weight:600!important}
+  .nav-cta:hover{background:#ccc!important}
+  .glitch{position:relative;display:inline-block}
+  .glitch:hover{animation:glitch-main .4s steps(2) forwards}
+  .glitch::before,.glitch::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;opacity:0;pointer-events:none}
+  .glitch:hover::before{animation:glitch-top .4s steps(2) forwards;color:#4ade80;clip-path:inset(0 0 60% 0)}
+  .glitch:hover::after{animation:glitch-bot .4s steps(2) forwards;color:#ff0055;clip-path:inset(60% 0 0 0)}
+  @keyframes glitch-main{0%{transform:none}25%{transform:translateX(3px)}50%{transform:translateX(-3px)}75%{transform:translateX(2px)}100%{transform:none}}
+  @keyframes glitch-top{0%{opacity:0}20%{opacity:1;transform:translateX(-4px)}60%{opacity:1;transform:translateX(4px)}100%{opacity:0;transform:none}}
+  @keyframes glitch-bot{0%{opacity:0}20%{opacity:1;transform:translateX(4px)}60%{opacity:1;transform:translateX(-4px)}100%{opacity:0;transform:none}}
+  .hero{min-height:100vh;display:flex;align-items:center;padding:100px 48px 60px}
+  .hero-inner{max-width:760px}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:6px 14px 6px 10px;font-size:13px;color:var(--text-sub);margin-bottom:32px;animation:fadeUp .5s .1s both}
+  .hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+  .hero-title{font-size:clamp(44px,7vw,80px);font-weight:700;line-height:1.05;letter-spacing:-2px;color:var(--text);margin-bottom:24px;animation:fadeUp .5s .2s both}
+  .hero-title .dim{color:var(--text-dim)}
+  .hero-cursor{display:inline-block;width:3px;height:.85em;background:var(--green);margin-left:4px;vertical-align:middle;animation:blink 1s step-end infinite;border-radius:1px}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  .hero-desc{font-size:17px;color:var(--text-sub);max-width:520px;line-height:1.75;margin-bottom:40px;animation:fadeUp .5s .3s both;font-family:'JetBrains Mono',monospace;min-height:2em}
+  .typewriter{overflow:hidden;border-right:2px solid var(--green);white-space:nowrap;width:0;animation:typing 1.8s steps(60) .8s forwards,cursor-fade .4s 2.8s forwards}
+  @keyframes typing{from{width:0}to{width:100%}}
+  @keyframes cursor-fade{to{border-color:transparent}}
+  .hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .5s .5s both}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;border-radius:8px;text-decoration:none;transition:all .15s;border:none}
+  .btn-primary{background:var(--text);color:var(--bg)}.btn-primary:hover{background:#d0d0d0}
+  .btn-outline{background:transparent;color:var(--text-sub);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--border-hi);color:var(--text);background:var(--card)}
+  .stats-bar{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:28px 48px;display:flex;gap:48px;flex-wrap:wrap}
+  .stat{display:flex;flex-direction:column;gap:4px}
+  .stat-num{font-size:28px;font-weight:700;color:var(--text);letter-spacing:-1px;line-height:1}
+  .stat-label{font-size:12px;color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:.08em}
+  .ticker{border-bottom:1px solid var(--border);padding:14px 0;overflow:hidden;position:relative}
+  .ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+  .ticker::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+  .ticker::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+  .ticker-track{display:flex;width:max-content;animation:marquee 22s linear infinite}
+  .ticker-track:hover{animation-play-state:paused}
+  .ticker-item{padding:0 28px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);white-space:nowrap;transition:color .15s}
+  .ticker-item:hover{color:var(--green)}
+  .ticker-sep{color:var(--border);font-size:16px;user-select:none;padding:0 4px}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .section{padding:80px 48px;max-width:1160px;margin:0 auto}
+  .section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:12px}
+  .section-title{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.5px}
+  .section-sub{font-size:13px;color:var(--text-dim);font-family:'JetBrains Mono',monospace}
+  .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s,transform .2s;display:flex;flex-direction:column;position:relative}
+  .card:hover{border-color:var(--border-hi);transform:translateY(-2px)}
+  .card-overlay{position:absolute;inset:0;background:rgba(13,13,13,.82);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .22s;z-index:10;border-radius:12px}
+  .card:hover .card-overlay{opacity:1}
+  .card-overlay-inner{display:flex;gap:10px}
+  .card-overlay-btn{font-size:13px;font-weight:600;padding:9px 18px;border-radius:7px;text-decoration:none;transition:all .15s;font-family:'Space Grotesk',sans-serif}
+  .cob-primary{background:var(--text);color:var(--bg)}.cob-primary:hover{background:#ccc}
+  .cob-outline{background:transparent;color:var(--text);border:1px solid var(--border-hi)}.cob-outline:hover{background:var(--card-hover)}
+  .cob-disabled{background:transparent;color:var(--text-dim);border:1px solid var(--border);pointer-events:none}
+  .card-media{width:100%;aspect-ratio:16/9;background:#111;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .card-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-media iframe{width:100%;height:100%;border:none;display:block}
+  .card-media-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%;height:100%;background:repeating-linear-gradient(45deg,#111 0,#111 20px,#141414 20px,#141414 40px)}
+  .placeholder-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.12em;background:var(--bg);padding:4px 10px;border-radius:4px;border:1px solid var(--border)}
+  .placeholder-num{font-size:52px;font-weight:700;color:#1e1e1e;letter-spacing:-2px;line-height:1}
+  .card-status{position:absolute;top:12px;right:12px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.06em}
+  .status-live{background:rgba(74,222,128,.15);color:var(--green);border:1px solid rgba(74,222,128,.3)}
+  .status-wip{background:rgba(255,200,50,.1);color:#f0b429;border:1px solid rgba(255,200,50,.2)}
+  .card-body{padding:24px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .card-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+  .card-desc{font-size:14px;color:var(--text-sub);line-height:1.65;flex:1}
+  .card-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:12px;font-weight:500;padding:4px 10px;border-radius:6px;background:var(--tag-bg);border:1px solid var(--border);color:var(--text-sub)}
+  .card-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:8px}
+  .card-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text-sub);text-decoration:none;padding:7px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg);transition:all .15s}
+  .card-link:hover{color:var(--text);border-color:var(--border-hi)}
+  .card-link-primary{background:var(--text);color:var(--bg);border-color:var(--text)}.card-link-primary:hover{background:#d0d0d0;border-color:#d0d0d0;color:var(--bg)}
+  .stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+  .stack-pill{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:13px;font-weight:500;color:var(--text-sub);display:flex;align-items:center;gap:10px;transition:all .15s;cursor:default}
+  .stack-pill:hover{border-color:var(--border-hi);color:var(--text);background:var(--card-hover)}
+  .stack-dot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);flex-shrink:0;transition:background .15s}
+  .stack-pill:hover .stack-dot{background:var(--green)}
+  .contact-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:56px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .contact-left h2{font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px}
+  .contact-left p{color:var(--text-sub);font-size:15px;line-height:1.7}
+  .contact-right{display:flex;flex-direction:column;gap:12px}
+  .contact-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 18px;text-decoration:none;transition:all .15s;gap:12px}
+  .contact-item:hover{border-color:var(--border-hi);background:#111}
+  .contact-item-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);font-weight:500;margin-bottom:3px}
+  .contact-item-value{font-size:14px;font-weight:600;color:var(--text)}
+  .contact-arrow{color:var(--text-dim);font-size:16px;flex-shrink:0}
+  footer{border-top:1px solid var(--border);padding:24px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--text-dim)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+  .reveal.visible{opacity:1;transform:none}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  /* ── EDITOR PANEL ── */
+  #editor-panel{position:fixed;top:0;right:0;bottom:0;width:400px;background:#0f0f0f;border-left:1px solid var(--border);z-index:500;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+  #editor-panel.open{transform:translateX(0)}
+  .ep-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+  .ep-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+  .ep-hint{font-size:11px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-top:2px}
+  .ep-close{background:none;border:1px solid var(--border);border-radius:6px;color:var(--text-sub);font-size:13px;padding:6px 14px;cursor:none;transition:all .15s;font-family:'Space Grotesk',sans-serif;font-weight:500}
+  .ep-close:hover{border-color:var(--border-hi);color:var(--text)}
+  .ep-body{flex:1;overflow-y:auto;padding:20px 24px}
+  .ep-body::-webkit-scrollbar{width:3px}
+  .ep-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  .ep-proj{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;transition:border-color .15s}
+  .ep-proj:hover{border-color:var(--border-hi)}
+  .ep-proj-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .ep-num{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text-dim);flex-shrink:0}
+  .ep-proj-title{font-size:14px;font-weight:600;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ep-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+  .ep-proj-actions{display:flex;gap:6px;align-items:center}
+  .ep-btn{background:none;border:1px solid var(--border);border-radius:5px;color:var(--text-dim);font-size:12px;padding:5px 10px;cursor:none;transition:all .15s;font-family:'Space Grotesk',sans-serif;font-weight:500}
+  .ep-btn:hover{border-color:var(--border-hi);color:var(--text);background:var(--card-hover)}
+  .ep-btn.danger:hover{border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.06)}
+  .ep-btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}.ep-btn.primary:hover{background:#d0d0d0}
+  .ep-form{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:8px}
+  .ep-form-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .ep-form-title{font-size:13px;font-weight:600;color:var(--text)}
+  .ep-field{margin-bottom:10px}
+  .ep-label{display:block;font-size:11px;font-weight:500;color:var(--text-dim);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+  .ep-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;padding:8px 12px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .15s}
+  .ep-input:focus{border-color:var(--border-hi)}
+  .ep-input::placeholder{color:var(--text-dim)}
+  textarea.ep-input{resize:vertical;min-height:68px}
+  select.ep-input{appearance:none;cursor:none}
+  .ep-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ep-form-btns{display:flex;gap:8px;margin-top:14px}
+  .ep-add-btn{width:100%;background:none;border:1px dashed var(--border);border-radius:10px;color:var(--text-dim);font-size:13px;padding:14px;cursor:none;transition:all .15s;font-family:'Space Grotesk',sans-serif;font-weight:500}
+  .ep-add-btn:hover{border-color:var(--green);color:var(--green)}
+  .ep-empty{text-align:center;padding:32px 0;color:var(--text-dim);font-size:13px}
+  .ep-toast{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);color:var(--green);border-radius:8px;padding:10px 16px;font-size:13px;text-align:center;margin-bottom:14px;display:none;font-family:'JetBrains Mono',monospace}
+  .ep-toast.show{display:block}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    cursor: none;
-  }
+  /* edit hint pill */
+  #edit-hint{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;z-index:200;pointer-events:none;transition:opacity .6s}
+  #edit-hint span{color:var(--green)}
 
-  /* ─── CUSTOM CURSOR ─── */
-  #cursor {
-    position: fixed;
-    width: 10px; height: 10px;
-    background: var(--green);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.08s ease, width 0.2s, height 0.2s, opacity 0.2s;
-    box-shadow: 0 0 0 3px rgba(74,222,128,0.15);
-  }
-  #cursor.hovered {
-    width: 22px; height: 22px;
-    background: transparent;
-    border: 1.5px solid var(--green);
-    box-shadow: none;
-  }
-  a, button, .card, .stack-pill, .nav-links a { cursor: none; }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: rgba(13,13,13,0.92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 48px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .nav-logo {
-    font-weight: 700;
-    font-size: 17px;
-    color: var(--text);
-    text-decoration: none;
-    letter-spacing: -0.3px;
-  }
-  .nav-logo span { color: var(--green); }
-
-  .nav-links { display: flex; gap: 8px; list-style: none; }
-  .nav-links a {
-    color: var(--text-sub);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 6px 14px;
-    border-radius: 6px;
-    transition: all 0.15s;
-  }
-  .nav-links a:hover { color: var(--text); background: var(--card); }
-  .nav-cta {
-    background: var(--text) !important;
-    color: var(--bg) !important;
-    font-weight: 600 !important;
-  }
-  .nav-cta:hover { background: #ccc !important; }
-
-  /* ─── GLITCH ─── */
-  .glitch {
-    position: relative;
-    display: inline-block;
-  }
-  .glitch:hover {
-    animation: glitch-main 0.4s steps(2) forwards;
-  }
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .glitch:hover::before {
-    animation: glitch-top 0.4s steps(2) forwards;
-    color: #4ade80;
-    clip-path: inset(0 0 60% 0);
-  }
-  .glitch:hover::after {
-    animation: glitch-bot 0.4s steps(2) forwards;
-    color: #ff0055;
-    clip-path: inset(60% 0 0 0);
-  }
-  @keyframes glitch-main {
-    0%  { transform: none; }
-    25% { transform: translateX(3px); }
-    50% { transform: translateX(-3px); }
-    75% { transform: translateX(2px); }
-    100%{ transform: none; }
-  }
-  @keyframes glitch-top {
-    0%  { opacity: 0; transform: none; }
-    20% { opacity: 1; transform: translateX(-4px); }
-    60% { opacity: 1; transform: translateX(4px); }
-    100%{ opacity: 0; transform: none; }
-  }
-  @keyframes glitch-bot {
-    0%  { opacity: 0; transform: none; }
-    20% { opacity: 1; transform: translateX(4px); }
-    60% { opacity: 1; transform: translateX(-4px); }
-    100%{ opacity: 0; transform: none; }
-  }
-
-  /* ─── HERO ─── */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 100px 48px 60px;
-  }
-  .hero-inner { max-width: 760px; }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 6px 14px 6px 10px;
-    font-size: 13px;
-    color: var(--text-sub);
-    margin-bottom: 32px;
-    animation: fadeUp 0.5s 0.1s both;
-  }
-  .hero-badge-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 8px var(--green);
-  }
-
-  .hero-title {
-    font-size: clamp(44px, 7vw, 80px);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -2px;
-    color: var(--text);
-    margin-bottom: 24px;
-    animation: fadeUp 0.5s 0.2s both;
-  }
-  .hero-title .dim { color: var(--text-dim); }
-
-  /* blinking cursor */
-  .hero-cursor {
-    display: inline-block;
-    width: 3px;
-    height: 0.85em;
-    background: var(--green);
-    margin-left: 4px;
-    vertical-align: middle;
-    animation: blink 1s step-end infinite;
-    border-radius: 1px;
-  }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-  .hero-desc {
-    font-size: 17px;
-    color: var(--text-sub);
-    max-width: 520px;
-    line-height: 1.75;
-    margin-bottom: 40px;
-    animation: fadeUp 0.5s 0.3s both;
-    font-family: 'JetBrains Mono', monospace;
-    min-height: 2em;
-  }
-  /* typewriter */
-  .typewriter {
-    overflow: hidden;
-    border-right: 2px solid var(--green);
-    white-space: nowrap;
-    width: 0;
-    animation:
-      typing 1.8s steps(60) 0.8s forwards,
-      cursor-fade 0.4s 2.8s forwards;
-  }
-  @keyframes typing { from{width:0} to{width:100%} }
-  @keyframes cursor-fade { to{border-color:transparent} }
-
-  .hero-btns {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    animation: fadeUp 0.5s 0.5s both;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 22px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: all 0.15s;
-    border: none;
-  }
-  .btn-primary { background: var(--text); color: var(--bg); }
-  .btn-primary:hover { background: #d0d0d0; }
-  .btn-outline {
-    background: transparent;
-    color: var(--text-sub);
-    border: 1px solid var(--border);
-  }
-  .btn-outline:hover {
-    border-color: var(--border-hi);
-    color: var(--text);
-    background: var(--card);
-  }
-
-  /* ─── STATS BAR ─── */
-  .stats-bar {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 28px 48px;
-    display: flex;
-    gap: 48px;
-    flex-wrap: wrap;
-  }
-  .stat { display: flex; flex-direction: column; gap: 4px; }
-  .stat-num {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -1px;
-    line-height: 1;
-  }
-  .stat-label {
-    font-size: 12px;
-    color: var(--text-dim);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  /* ─── MARQUEE TICKER ─── */
-  .ticker {
-    border-bottom: 1px solid var(--border);
-    padding: 14px 0;
-    overflow: hidden;
-    position: relative;
-  }
-  .ticker::before,
-  .ticker::after {
-    content: '';
-    position: absolute;
-    top: 0; bottom: 0;
-    width: 80px;
-    z-index: 2;
-    pointer-events: none;
-  }
-  .ticker::before { left: 0;  background: linear-gradient(to right,  var(--bg), transparent); }
-  .ticker::after  { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
-  .ticker-track {
-    display: flex;
-    width: max-content;
-    animation: marquee 22s linear infinite;
-    gap: 0;
-  }
-  .ticker-track:hover { animation-play-state: paused; }
-  .ticker-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 28px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--text-dim);
-    white-space: nowrap;
-    transition: color 0.15s;
-  }
-  .ticker-item:hover { color: var(--green); }
-  .ticker-sep {
-    color: var(--border);
-    font-size: 16px;
-    user-select: none;
-    padding: 0 4px;
-  }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-
-  /* ─── SECTIONS ─── */
-  .section {
-    padding: 80px 48px;
-    max-width: 1160px;
-    margin: 0 auto;
-  }
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .section-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.5px;
-  }
-  .section-sub {
-    font-size: 13px;
-    color: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  /* ─── PROJECTS GRID ─── */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 16px;
-  }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-  .card:hover { border-color: var(--border-hi); transform: translateY(-2px); }
-
-  /* card hover reveal overlay */
-  .card-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(13,13,13,0.82);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.22s ease;
-    z-index: 10;
-    border-radius: 12px;
-  }
-  .card:hover .card-overlay { opacity: 1; }
-  .card-overlay-inner {
-    display: flex;
-    gap: 10px;
-  }
-  .card-overlay-btn {
-    font-size: 13px;
-    font-weight: 600;
-    padding: 9px 18px;
-    border-radius: 7px;
-    text-decoration: none;
-    transition: all 0.15s;
-    font-family: 'Space Grotesk', sans-serif;
-  }
-  .cob-primary {
-    background: var(--text);
-    color: var(--bg);
-  }
-  .cob-primary:hover { background: #ccc; }
-  .cob-outline {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border-hi);
-  }
-  .cob-outline:hover { background: var(--card-hover); }
-  .cob-disabled {
-    background: transparent;
-    color: var(--text-dim);
-    border: 1px solid var(--border);
-    pointer-events: none;
-  }
-
-  .card-media {
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: #111;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .card-media iframe { width: 100%; height: 100%; border: none; display: block; }
-  .card-media-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-      45deg,
-      #111 0px, #111 20px,
-      #141414 20px, #141414 40px
-    );
-  }
-  .placeholder-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    background: var(--bg);
-    padding: 4px 10px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-  }
-  .placeholder-num {
-    font-size: 52px;
-    font-weight: 700;
-    color: #1e1e1e;
-    letter-spacing: -2px;
-    line-height: 1;
-  }
-  .card-status {
-    position: absolute;
-    top: 12px; right: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 100px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .status-live {
-    background: rgba(74,222,128,0.15);
-    color: var(--green);
-    border: 1px solid rgba(74,222,128,0.3);
-  }
-  .status-wip {
-    background: rgba(255,200,50,0.1);
-    color: #f0b429;
-    border: 1px solid rgba(255,200,50,0.2);
-  }
-  .card-body {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    flex: 1;
-  }
-  .card-title {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.3px;
-  }
-  .card-desc {
-    font-size: 14px;
-    color: var(--text-sub);
-    line-height: 1.65;
-    flex: 1;
-  }
-  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tag {
-    font-size: 12px;
-    font-weight: 500;
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: var(--tag-bg);
-    border: 1px solid var(--border);
-    color: var(--text-sub);
-  }
-  .card-footer {
-    padding: 16px 24px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 8px;
-  }
-  .card-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-sub);
-    text-decoration: none;
-    padding: 7px 14px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    transition: all 0.15s;
-  }
-  .card-link:hover { color: var(--text); border-color: var(--border-hi); }
-  .card-link-primary {
-    background: var(--text);
-    color: var(--bg);
-    border-color: var(--text);
-  }
-  .card-link-primary:hover { background: #d0d0d0; border-color: #d0d0d0; color: var(--bg); }
-
-  /* ─── STACK ─── */
-  .stack-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 8px;
-  }
-  .stack-pill {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-sub);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.15s;
-    cursor: default;
-  }
-  .stack-pill:hover { border-color: var(--border-hi); color: var(--text); background: var(--card-hover); }
-  .stack-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--text-dim);
-    flex-shrink: 0;
-    transition: background 0.15s;
-  }
-  .stack-pill:hover .stack-dot { background: var(--green); }
-
-  /* ─── CONTACT ─── */
-  .contact-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 56px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: center;
-  }
-  .contact-left h2 {
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    line-height: 1.1;
-    margin-bottom: 16px;
-  }
-  .contact-left p { color: var(--text-sub); font-size: 15px; line-height: 1.7; }
-  .contact-right { display: flex; flex-direction: column; gap: 12px; }
-  .contact-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 18px;
-    text-decoration: none;
-    transition: all 0.15s;
-    gap: 12px;
-  }
-  .contact-item:hover { border-color: var(--border-hi); background: #111; }
-  .contact-item-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-dim);
-    font-weight: 500;
-    margin-bottom: 3px;
-  }
-  .contact-item-value { font-size: 14px; font-weight: 600; color: var(--text); }
-  .contact-arrow { color: var(--text-dim); font-size: 16px; flex-shrink: 0; }
-
-  /* ─── FOOTER ─── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 24px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    font-size: 13px;
-    color: var(--text-dim);
-  }
-
-  /* ─── ANIMATIONS ─── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .reveal {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-  .reveal.visible { opacity: 1; transform: none; }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 768px) {
-    nav { padding: 0 20px; }
-    .hero { padding: 90px 20px 48px; }
-    .stats-bar { padding: 24px 20px; gap: 32px; }
-    .section { padding: 60px 20px; }
-    .contact-card { grid-template-columns: 1fr; padding: 32px 24px; }
-    footer { padding: 20px; }
-    .nav-links { display: none; }
-  }
-  @media (max-width: 480px) {
-    .projects-grid { grid-template-columns: 1fr; }
-  }
+  @media(max-width:768px){nav{padding:0 20px}.hero{padding:90px 20px 48px}.stats-bar{padding:24px 20px;gap:32px}.section{padding:60px 20px}.contact-card{grid-template-columns:1fr;padding:32px 24px}footer{padding:20px}.nav-links{display:none}#editor-panel{width:100%}}
+  @media(max-width:480px){.projects-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- =============================================
-     ⚙️  YOUR CONFIG — only edit this block
-     ============================================= -->
 <script>
 const CONFIG = {
   handle:  "@nyrosk",
@@ -660,62 +168,27 @@ const CONFIG = {
   email:   "me@email.com",
   github:  "https://github.com/0xeth22-star",
   twitter: "https://twitter.com/nyrosk",
-
   stats: [
     { num: "3+",   label: "Projects Shipped" },
     { num: "Web3", label: "Niche" },
     { num: "FS",   label: "Full Stack" },
     { num: "Open", label: "For Work" },
   ],
-
-  projects: [
-    {
-      number: "01",
-      title:  "Minting Bot Website",
-      desc:   "Frontend interface for an automated NFT minting bot. Wallet integration, real-time status, transaction feedback.",
-      tags:   ["Web3", "NFT", "Wallet Connect", "React"],
-      status: "wip",
-      live:   null,
-      repo:   null,
-      video:  null,
-      image:  null,
-    },
-    {
-      number: "02",
-      title:  "NFT Project Form Site",
-      desc:   "Data collection and onboarding site for a live NFT project. Clean UX, form validation, team collab.",
-      tags:   ["Web3", "NFT", "Form"],
-      status: "live",
-      live:   null,
-      repo:   null,
-      video:  null,
-      image:  null,
-    },
-    {
-      number: "03",
-      title:  "Game Site + Form",
-      desc:   "Gaming landing page with embedded form flow. Built post-launch for an active game project.",
-      tags:   ["Gaming", "Full Stack", "Form"],
-      status: "live",
-      live:   null,
-      repo:   null,
-      video:  null,
-      image:  null,
-    },
-  ],
-
-  stack: [
-    "React", "Next.js", "TypeScript", "Node.js",
-    "Solidity", "Ethers.js", "wagmi", "Web3.js",
-    "PostgreSQL", "MongoDB", "REST APIs", "GraphQL",
-    "Tailwind CSS", "Git / GitHub", "Docker", "Figma",
-  ],
+  stack: ["React","Next.js","TypeScript","Node.js","Solidity","Ethers.js","wagmi","Web3.js","PostgreSQL","MongoDB","REST APIs","GraphQL","Tailwind CSS","Git / GitHub","Docker","Figma"],
 };
+const PKEY = 'nyrosk-projects-v2';
+const DEFAULTS = [
+  {id:'p1',title:"Minting Bot Website",desc:"Frontend interface for an automated NFT minting bot. Wallet integration, real-time status, transaction feedback.",tags:["Web3","NFT","Wallet Connect","React"],status:"wip",live:null,repo:null,video:null,image:null},
+  {id:'p2',title:"NFT Project Form Site",desc:"Data collection and onboarding site for a live NFT project. Clean UX, form validation, team collab.",tags:["Web3","NFT","Form"],status:"live",live:null,repo:null,video:null,image:null},
+  {id:'p3',title:"Game Site + Form",desc:"Gaming landing page with embedded form flow. Built post-launch for an active game project.",tags:["Gaming","Full Stack","Form"],status:"live",live:null,repo:null,video:null,image:null},
+];
+function loadP(){try{const d=localStorage.getItem(PKEY);return d?JSON.parse(d):DEFAULTS}catch(e){return DEFAULTS}}
+function saveP(a){try{localStorage.setItem(PKEY,JSON.stringify(a))}catch(e){}}
+let PROJECTS = loadP();
 </script>
-<!-- ============================================= -->
 
-<!-- Custom cursor -->
 <div id="cursor"></div>
+<div id="edit-hint">press <span>E</span> to edit projects</div>
 
 <nav>
   <a class="nav-logo" href="#" id="nav-handle"></a>
@@ -739,8 +212,6 @@ const CONFIG = {
 </div>
 
 <div class="stats-bar" id="stats-bar"></div>
-
-<!-- Marquee ticker -->
 <div class="ticker" id="ticker-wrap"></div>
 
 <div class="section reveal" id="work">
@@ -775,151 +246,193 @@ const CONFIG = {
   <span>Built with plain HTML · GitHub Pages</span>
 </footer>
 
+<!-- EDITOR PANEL -->
+<div id="editor-panel">
+  <div class="ep-head">
+    <div>
+      <div class="ep-title">Project Editor</div>
+      <div class="ep-hint">press E to toggle · saves instantly</div>
+    </div>
+    <button class="ep-close" onclick="closeEditor()">✕ Close</button>
+  </div>
+  <div class="ep-body" id="ep-body"></div>
+</div>
+
 <script>
-/* ── CUSTOM CURSOR ── */
+/* CURSOR */
 const cur = document.getElementById('cursor');
-document.addEventListener('mousemove', e => {
-  cur.style.left = e.clientX + 'px';
-  cur.style.top  = e.clientY + 'px';
-});
-document.querySelectorAll('a, button, .card, .stack-pill').forEach(el => {
-  el.addEventListener('mouseenter', () => cur.classList.add('hovered'));
-  el.addEventListener('mouseleave', () => cur.classList.remove('hovered'));
-});
+document.addEventListener('mousemove', e => { cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px'; });
+function hookCursor(root){ (root||document).querySelectorAll('a,button,.card,.stack-pill').forEach(el=>{ el.addEventListener('mouseenter',()=>cur.classList.add('hovered')); el.addEventListener('mouseleave',()=>cur.classList.remove('hovered')); }); }
 
-/* ── NAV ── */
+/* NAV */
 const handle = CONFIG.handle.replace('@','');
-const h = document.getElementById('nav-handle');
-h.innerHTML = '<span>@</span>' + handle;
-h.setAttribute('data-text', '@' + handle);
-h.classList.add('glitch');
+const navH = document.getElementById('nav-handle');
+navH.innerHTML = '<span>@</span>'+handle; navH.setAttribute('data-text','@'+handle); navH.classList.add('glitch');
 
-/* ── HERO ── */
+/* HERO */
 document.getElementById('hero-role').textContent = CONFIG.role;
-
-// title with glitch + blinking cursor
 const titleEl = document.getElementById('hero-title');
-const nameSpan = document.createElement('span');
-nameSpan.className = 'glitch';
-nameSpan.setAttribute('data-text', handle);
-nameSpan.textContent = handle;
-const cursorSpan = document.createElement('span');
-cursorSpan.className = 'hero-cursor';
-const roleSpan = document.createElement('span');
-roleSpan.className = 'dim';
-roleSpan.textContent = CONFIG.role;
-titleEl.appendChild(nameSpan);
-titleEl.appendChild(cursorSpan);
-titleEl.appendChild(document.createElement('br'));
-titleEl.appendChild(roleSpan);
+const ns=document.createElement('span'); ns.className='glitch'; ns.setAttribute('data-text',handle); ns.textContent=handle;
+const cs=document.createElement('span'); cs.className='hero-cursor';
+const rs=document.createElement('span'); rs.className='dim'; rs.textContent=CONFIG.role;
+titleEl.appendChild(ns); titleEl.appendChild(cs); titleEl.appendChild(document.createElement('br')); titleEl.appendChild(rs);
+document.getElementById('hero-desc').textContent = CONFIG.bio;
 
-// typewriter bio
-const descEl = document.getElementById('hero-desc');
-descEl.textContent = CONFIG.bio;
+/* STATS */
+const sb=document.getElementById('stats-bar');
+CONFIG.stats.forEach(s=>{ sb.innerHTML+=`<div class="stat"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div>`; });
 
-/* ── STATS ── */
-const sb = document.getElementById('stats-bar');
-CONFIG.stats.forEach(s => {
-  sb.innerHTML += `<div class="stat"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div>`;
+/* TICKER */
+const tw=document.getElementById('ticker-wrap');
+const ti=CONFIG.stack.concat(CONFIG.stack);
+tw.innerHTML='<div class="ticker-track">'+ti.map((s,i)=>`<span class="ticker-item">${s}</span>${i<ti.length-1?'<span class="ticker-sep">·</span>':''}`).join('')+'</div>';
+
+/* STACK */
+const sg=document.getElementById('stack-grid');
+CONFIG.stack.forEach(s=>{ sg.innerHTML+=`<div class="stack-pill"><div class="stack-dot"></div>${s}</div>`; });
+
+/* CONTACT */
+const cl=document.getElementById('contact-links');
+cl.innerHTML+=`<a class="contact-item" href="mailto:${CONFIG.email}"><div><div class="contact-item-label">Email</div><div class="contact-item-value">${CONFIG.email}</div></div><div class="contact-arrow">↗</div></a>`;
+if(CONFIG.github) cl.innerHTML+=`<a class="contact-item" href="${CONFIG.github}" target="_blank"><div><div class="contact-item-label">GitHub</div><div class="contact-item-value">${CONFIG.github.replace('https://github.com/','@')}</div></div><div class="contact-arrow">↗</div></a>`;
+if(CONFIG.twitter) cl.innerHTML+=`<a class="contact-item" href="${CONFIG.twitter}" target="_blank"><div><div class="contact-item-label">Twitter / X</div><div class="contact-item-value">${CONFIG.twitter.replace('https://twitter.com/','@')}</div></div><div class="contact-arrow">↗</div></a>`;
+document.getElementById('footer-left').textContent=`${CONFIG.handle} © ${new Date().getFullYear()}`;
+
+/* REVEAL */
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* PROJECTS RENDER */
+function renderProjects(){
+  document.getElementById('project-count').textContent=PROJECTS.length+' projects';
+  const pg=document.getElementById('projects-grid'); pg.innerHTML='';
+  PROJECTS.forEach((p,i)=>{
+    const num=String(i+1).padStart(2,'0');
+    let media=p.video?`<iframe src="${p.video}" allowfullscreen loading="lazy"></iframe>`:p.image?`<img src="${p.image}" alt="${p.title}" loading="lazy"/>`:
+      `<div class="card-media-placeholder"><div class="placeholder-num">${num}</div><div class="placeholder-label">Preview coming soon</div></div>`;
+    const badge=p.status==='live'?`<div class="card-status status-live">● Live</div>`:p.status==='wip'?`<div class="card-status status-wip">● In Progress</div>`:'';
+    let links='';
+    if(p.live) links+=`<a class="card-link card-link-primary" href="${p.live}" target="_blank">↗ View Live</a>`;
+    if(p.repo) links+=`<a class="card-link" href="${p.repo}" target="_blank">⌥ Source</a>`;
+    if(!p.live&&!p.repo) links=`<span class="card-link" style="opacity:.35;pointer-events:none">Links coming soon</span>`;
+    let ov='';
+    if(p.live&&p.repo) ov=`<a class="card-overlay-btn cob-primary" href="${p.live}" target="_blank">↗ View Live</a><a class="card-overlay-btn cob-outline" href="${p.repo}" target="_blank">⌥ Source</a>`;
+    else if(p.live) ov=`<a class="card-overlay-btn cob-primary" href="${p.live}" target="_blank">↗ View Live</a>`;
+    else if(p.repo) ov=`<a class="card-overlay-btn cob-outline" href="${p.repo}" target="_blank">⌥ Source</a>`;
+    else ov=`<span class="card-overlay-btn cob-disabled">Coming Soon</span>`;
+    const div=document.createElement('div'); div.className='card';
+    div.innerHTML=`<div class="card-overlay"><div class="card-overlay-inner">${ov}</div></div><div class="card-media">${media}${badge}</div><div class="card-body"><div class="card-title">${p.title}</div><div class="card-desc">${p.desc}</div><div class="card-tags">${(p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div></div><div class="card-footer">${links}</div>`;
+    pg.appendChild(div);
+  });
+  hookCursor();
+}
+
+/* EDITOR */
+let editingId=null;
+const panel=document.getElementById('editor-panel');
+const epBody=document.getElementById('ep-body');
+
+function openEditor(){ panel.classList.add('open'); renderEditor(); }
+function closeEditor(){ panel.classList.remove('open'); editingId=null; }
+
+document.addEventListener('keydown',e=>{
+  if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  if(e.key==='e'||e.key==='E'){ panel.classList.contains('open')?closeEditor():openEditor(); }
+  if(e.key==='Escape') closeEditor();
 });
 
-/* ── TICKER ── */
-const tickerWrap = document.getElementById('ticker-wrap');
-const items = CONFIG.stack.concat(CONFIG.stack); // double for seamless loop
-const trackHTML = '<div class="ticker-track">' +
-  items.map((s, i) =>
-    `<span class="ticker-item">${s}</span>` +
-    (i < items.length - 1 ? '<span class="ticker-sep">·</span>' : '')
-  ).join('') +
-'</div>';
-tickerWrap.innerHTML = trackHTML;
+// fade hint
+setTimeout(()=>{ const h=document.getElementById('edit-hint'); if(h) h.style.opacity='0'; },4500);
 
-/* ── PROJECTS ── */
-document.getElementById('project-count').textContent = CONFIG.projects.length + ' projects';
-const pg = document.getElementById('projects-grid');
+function esc(s){ return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
-CONFIG.projects.forEach(p => {
-  let media = '';
-  if (p.video) {
-    media = `<iframe src="${p.video}" allowfullscreen loading="lazy"></iframe>`;
-  } else if (p.image) {
-    media = `<img src="${p.image}" alt="${p.title}" loading="lazy"/>`;
-  } else {
-    media = `<div class="card-media-placeholder">
-      <div class="placeholder-num">${p.number}</div>
-      <div class="placeholder-label">Preview coming soon</div>
-    </div>`;
-  }
+function renderEditor(){
+  epBody.innerHTML='';
+  const toast=document.createElement('div'); toast.className='ep-toast'; toast.id='ep-toast'; toast.textContent='Saved ✓';
+  epBody.appendChild(toast);
 
-  const badge = p.status === 'live'
-    ? `<div class="card-status status-live">● Live</div>`
-    : p.status === 'wip'
-    ? `<div class="card-status status-wip">● In Progress</div>`
-    : '';
+  if(!PROJECTS.length){ epBody.innerHTML+='<div class="ep-empty">No projects yet — add one below</div>'; }
 
-  // footer links (below card)
-  let links = '';
-  if (p.live) links += `<a class="card-link card-link-primary" href="${p.live}" target="_blank">↗ View Live</a>`;
-  if (p.repo) links += `<a class="card-link" href="${p.repo}" target="_blank">⌥ Source</a>`;
-  if (!p.live && !p.repo) links = `<span class="card-link" style="opacity:0.35;pointer-events:none;cursor:default">Links coming soon</span>`;
-
-  // overlay buttons
-  let overlayBtns = '';
-  if (p.live && p.repo) {
-    overlayBtns = `<a class="card-overlay-btn cob-primary" href="${p.live}" target="_blank">↗ View Live</a>
-                   <a class="card-overlay-btn cob-outline" href="${p.repo}" target="_blank">⌥ Source</a>`;
-  } else if (p.live) {
-    overlayBtns = `<a class="card-overlay-btn cob-primary" href="${p.live}" target="_blank">↗ View Live</a>`;
-  } else if (p.repo) {
-    overlayBtns = `<a class="card-overlay-btn cob-outline" href="${p.repo}" target="_blank">⌥ Source</a>`;
-  } else {
-    overlayBtns = `<span class="card-overlay-btn cob-disabled">Coming Soon</span>`;
-  }
-
-  pg.innerHTML += `
-    <div class="card">
-      <div class="card-overlay"><div class="card-overlay-inner">${overlayBtns}</div></div>
-      <div class="card-media">${media}${badge}</div>
-      <div class="card-body">
-        <div class="card-title">${p.title}</div>
-        <div class="card-desc">${p.desc}</div>
-        <div class="card-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+  PROJECTS.forEach((p,i)=>{
+    if(editingId===p.id){ epBody.appendChild(buildForm(p)); return; }
+    const row=document.createElement('div'); row.className='ep-proj';
+    const badge=p.status==='live'?`<span class="ep-badge status-live">Live</span>`:p.status==='wip'?`<span class="ep-badge status-wip">WIP</span>`:'';
+    row.innerHTML=`
+      <div class="ep-proj-top">
+        <span class="ep-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="ep-proj-title">${p.title||'Untitled'}</span>
+        ${badge}
       </div>
-      <div class="card-footer">${links}</div>
+      <div class="ep-proj-actions">
+        <button class="ep-btn" onclick="moveP('${p.id}',-1)">↑</button>
+        <button class="ep-btn" onclick="moveP('${p.id}',1)">↓</button>
+        <button class="ep-btn" onclick="startEdit('${p.id}')">Edit</button>
+        <button class="ep-btn danger" onclick="delP('${p.id}')">Del</button>
+      </div>`;
+    epBody.appendChild(row);
+  });
+
+  if(editingId==='__new__'){ epBody.appendChild(buildForm(null)); }
+  else {
+    const add=document.createElement('button'); add.className='ep-add-btn'; add.textContent='+ Add new project';
+    add.onclick=()=>{ editingId='__new__'; renderEditor(); setTimeout(()=>{ const el=document.getElementById('ef-title'); if(el) el.focus(); },50); };
+    epBody.appendChild(add);
+  }
+  hookCursor(epBody);
+}
+
+function buildForm(p){
+  const isNew=!p; const wrap=document.createElement('div'); wrap.className='ep-form';
+  wrap.innerHTML=`
+    <div class="ep-form-header">
+      <span class="ep-form-title">${isNew?'New project':'Editing project'}</span>
+      <button class="ep-btn" onclick="cancelEdit()">Cancel</button>
+    </div>
+    <div class="ep-field"><label class="ep-label">Title</label><input class="ep-input" id="ef-title" placeholder="My Project" value="${isNew?'':esc(p.title)}"></div>
+    <div class="ep-field"><label class="ep-label">Description</label><textarea class="ep-input" id="ef-desc" placeholder="What it does...">${isNew?'':esc(p.desc)}</textarea></div>
+    <div class="ep-field"><label class="ep-label">Tags (comma-separated)</label><input class="ep-input" id="ef-tags" placeholder="Web3, React, NFT" value="${isNew?'':((p.tags||[]).join(', '))}"></div>
+    <div class="ep-row2">
+      <div class="ep-field"><label class="ep-label">Status</label>
+        <select class="ep-input" id="ef-status">
+          <option value="">None</option>
+          <option value="live"${p&&p.status==='live'?' selected':''}>Live</option>
+          <option value="wip"${p&&p.status==='wip'?' selected':''}>In Progress</option>
+        </select>
+      </div>
+      <div class="ep-field"><label class="ep-label">Image</label><input class="ep-input" id="ef-image" placeholder="images/p.png" value="${isNew?'':esc(p.image||'')}"></div>
+    </div>
+    <div class="ep-row2">
+      <div class="ep-field"><label class="ep-label">Live URL</label><input class="ep-input" id="ef-live" placeholder="https://..." value="${isNew?'':esc(p.live||'')}"></div>
+      <div class="ep-field"><label class="ep-label">Repo URL</label><input class="ep-input" id="ef-repo" placeholder="https://github.com/..." value="${isNew?'':esc(p.repo||'')}"></div>
+    </div>
+    <div class="ep-form-btns">
+      <button class="ep-btn primary" style="flex:1" onclick="saveEdit('${isNew?'__new__':p.id}')">${isNew?'Add project':'Save changes'}</button>
     </div>`;
-});
+  return wrap;
+}
 
-/* ── STACK ── */
-const sg = document.getElementById('stack-grid');
-CONFIG.stack.forEach(s => {
-  sg.innerHTML += `<div class="stack-pill"><div class="stack-dot"></div>${s}</div>`;
-});
+function startEdit(id){ editingId=id; renderEditor(); setTimeout(()=>{ const el=document.getElementById('ef-title'); if(el) el.focus(); },50); }
+function cancelEdit(){ editingId=null; renderEditor(); }
 
-/* ── CONTACT ── */
-const cl = document.getElementById('contact-links');
-cl.innerHTML += `
-  <a class="contact-item" href="mailto:${CONFIG.email}">
-    <div><div class="contact-item-label">Email</div><div class="contact-item-value">${CONFIG.email}</div></div>
-    <div class="contact-arrow">↗</div>
-  </a>`;
-if (CONFIG.github) cl.innerHTML += `
-  <a class="contact-item" href="${CONFIG.github}" target="_blank">
-    <div><div class="contact-item-label">GitHub</div><div class="contact-item-value">${CONFIG.github.replace('https://github.com/','@')}</div></div>
-    <div class="contact-arrow">↗</div>
-  </a>`;
-if (CONFIG.twitter) cl.innerHTML += `
-  <a class="contact-item" href="${CONFIG.twitter}" target="_blank">
-    <div><div class="contact-item-label">Twitter / X</div><div class="contact-item-value">${CONFIG.twitter.replace('https://twitter.com/','@')}</div></div>
-    <div class="contact-arrow">↗</div>
-  </a>`;
+function saveEdit(id){
+  const title=document.getElementById('ef-title').value.trim();
+  if(!title){ document.getElementById('ef-title').focus(); return; }
+  const proj={ id:id==='__new__'?'p'+Date.now():id, title, desc:document.getElementById('ef-desc').value.trim(), tags:document.getElementById('ef-tags').value.split(',').map(t=>t.trim()).filter(Boolean), status:document.getElementById('ef-status').value||null, live:document.getElementById('ef-live').value.trim()||null, repo:document.getElementById('ef-repo').value.trim()||null, image:document.getElementById('ef-image').value.trim()||null, video:null };
+  if(id==='__new__') PROJECTS.push(proj);
+  else { const idx=PROJECTS.findIndex(p=>p.id===id); if(idx>-1) PROJECTS[idx]=proj; }
+  editingId=null; commit();
+}
 
-document.getElementById('footer-left').textContent = `${CONFIG.handle} © ${new Date().getFullYear()}`;
+function delP(id){ if(!confirm('Delete?')) return; PROJECTS=PROJECTS.filter(p=>p.id!==id); if(editingId===id) editingId=null; commit(); }
+function moveP(id,dir){ const i=PROJECTS.findIndex(p=>p.id===id),j=i+dir; if(j<0||j>=PROJECTS.length) return; [PROJECTS[i],PROJECTS[j]]=[PROJECTS[j],PROJECTS[i]]; commit(); }
 
-/* ── SCROLL REVEAL ── */
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.08 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+function commit(){
+  saveP(PROJECTS); renderProjects(); renderEditor();
+  const t=document.getElementById('ep-toast'); if(t){ t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); }
+}
+
+renderProjects();
+hookCursor();
 </script>
 </body>
 </html>
